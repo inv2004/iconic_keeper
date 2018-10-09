@@ -23,8 +23,9 @@ The only function implemented is: lastNOrders:{[clientIDs;dates;n]
 
 5) Example of usage:
 ```
-  h:hopen 5000
-  h(`lastNOrders;964486 2233991 2233991;2018.07.06,z.d;2)
+q
+q)h:hopen 5000
+q)h(`lastNOrders;964486 2233991 2233991;2018.07.06,z.d;2)
 ```
 
 We did not have any framework to propagate functions from hdb/rdb to gw, thats why I defined its manually in rdb/hdb/gw.

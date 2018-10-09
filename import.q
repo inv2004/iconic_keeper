@@ -7,29 +7,28 @@ orders:.schema.orders;
 
 tmp:"tmp"
 
-system "mkdir tmp || true"
+system "mkdir ",tmp," || true"
 system "zcat full_log.json.gz | split -l 9000000 - tmp/log_"
 
-s_cols:exec c from (meta .schema.orders) where t="s", not c=`typ;
-j_cols:exec c from (meta .schema.orders) where t="j";
 unix_ts:"j"$1970.01.01D00:00:00;
 
-ct1:{@[x;i;:;`$x[i:where 10=type each x]]};
-ct2:{@[x;i;:;"j"$x[i:where -9=type each x]]};
-/ ct3:{@[x;`date`time;:;(`date$p;`time$p:"p"$unix_ts+1000000*x`timestamp)]}
-ct3:{@[x;`timestamp;:;"p"$unix_ts+1000000*x`timestamp]}
+convertSym:{@[x;i;:;`$x[i:where 10=type each x]]};
+convertJ:{@[x;i;:;"j"$x[i:where -9=type each x]]};
+convertTS:{@[x;`timestamp;:;"p"$unix_ts+1000000*x`timestamp]}
+
+convertType:'[convertTS;convertJ;convertSym];
 
 import:{[fn]
     s:read0 hsym `$tmp,"/",string fn;
     -1 string fn;
     -1 string count s;
     fs:fs where `client_id in/: key each fs:.j.k each s;
-    {`orders upsert ct3@ct2@ct1@@[(x t), 1_ x;`typ;:;t: first key x]} each fs;
+    {`orders upsert convertType@@[(x t), 1_ x;`typ;:;t: first key x]} each fs;
   };
 
-/ import each key `:tmp;
+import each key `:tmp;
 / `:1.dat set orders;
-orders:get `:1.dat;
+/ orders:get `:1.dat;
 .Q.gc[];
 update date:`date$timestamp, time:`time$timestamp from `orders;
 

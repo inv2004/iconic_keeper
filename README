@@ -1,8 +1,29 @@
-1) download full-log.json.gz into this folder
-2) q import.q
-3) run.q
-
+1) Version: >= KDB+ 3.6 2018.06.14
+2) Download full-log.json.gz into this folder
+3) Import json into kdb format
 ```
-q
-) h:hopen 5000
+q import.q
+```
+hist folder contais hdb
+rdb.dat contains last date (it could be extracted by .z.t (today) date)
+
+4) Start stack
+```
+run.sh
+```
+it will run hdb, rdb and gw processes:
+gw listens 5000 port, rdb - 6000, hdb - 6010
+
+I applied last functionality of the 3.6 (Deferred response: -30! function)
+
+The only function implemented is: lastNOrders:{[clientIDs;dates;n]
+
+5) Example of usage:
+```
+  h:hopen 5000
+  h(`lastNOrders;964486 2233991 2233991;2018.07.06;2)
+```
+
+We did not have any framework to propagate functions from hdb/rdb to gw, thats why I defined its manually in rdb/hdb/gw.
+
 

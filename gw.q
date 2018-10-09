@@ -3,6 +3,10 @@ hdb:hopen 6010;
 \p 5000
 
 pending:([handle:0#0] fn:(); res:());
+/ table with:
+/   handle:key with handle number
+/   fn: function to aggerate results
+/   res: returned results
 
 callback:{[clHandle;result] 
   pending[clHandle;`res],:enlist 0N!result;
@@ -19,9 +23,9 @@ async_call:{[clHandle;query]
     neg[.z.w](`callback;clHandle;@[(0b;)value@;query;{[errorStr](1b;errorStr)}]);
   };
 
-lastNOrders:{[c_id;dt;n]
+lastNOrders:{[clientIDs;dt;n]
     pending[.z.w;`fn]:{ungroup raze x};
-    neg[hdb, rdb]@\:(async_call;.z.w;(`lastNOrders;c_id;dt;n));
+    neg[hdb, rdb]@\:(async_call;.z.w;(`lastNOrders;clientIDs;dt;n));
     -30!(::);
   };
 

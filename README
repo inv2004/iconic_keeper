@@ -1,0 +1,8 @@
+1) download full-log.json.gz into this folder
+2) q import.q
+3) run.q
+
+```
+q
+) h:hopen 5000
+

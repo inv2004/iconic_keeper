@@ -14,7 +14,7 @@ run.sh
 it will run hdb, rdb and gw processes:
 gw listens 5000 port, rdb - 6000, hdb - 6010
 
-I applied last functionality of the 3.6 (Deferred response: -30! function)
+I applied last functionality of the 3.6 (Deferred response: -30! function) for async requests.
 
 The only function implemented is: lastNOrders:{[clientIDs;dates;n]
 

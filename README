@@ -1,5 +1,8 @@
 1) Version: >= KDB+ 3.6 2018.06.14
-2) Download full-log.json.gz into this folder
+2) Download json into this folder
+```
+wget "http://94.130.33.186:8888/x/full-log.json.gz"
+```
 3) Import json into kdb format
 ```
 q import.q

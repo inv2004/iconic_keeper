@@ -2,7 +2,7 @@ rdb:hopen 6000;
 hdb:hopen 6010;
 \p 5000
 
-pending:([handle:0#0] fn:(); res:());
+pending:([handle:0#0] fn:(); expect:0#0; res:());
 / table with:
 /   handle:key with handle number
 /   fn: function to aggerate results
@@ -10,7 +10,8 @@ pending:([handle:0#0] fn:(); res:());
 
 callback:{[clHandle;result] 
   pending[clHandle;`res],:enlist 0N!result;
-  if[2=count pending[clHandle;`res];
+  pending[.z.w;`expect]-:1;
+  if[0=pending[clHandle;`expect];
     isError:0<sum pending[clHandle;`res][;0];
     result:pending[clHandle;`res][;1];
     if[isError; -30!(clHandle;isError;result[0])];
@@ -25,7 +26,9 @@ async_call:{[clHandle;query]
 
 lastNOrders:{[clientIDs;dt;n]
     pending[.z.w;`fn]:{ungroup raze x};
-    neg[hdb, rdb]@\:(async_call;.z.w;(`lastNOrders;clientIDs;dt;n));
+    workers:$[not .z.d in dt; hdb; 1=count dt;`rdb; hdb,rdb];
+    pending[.z.w;`expect]:count workers;
+    neg[workers]@\:(async_call;.z.w;(`lastNOrders;clientIDs;dt;n));
     -30!(::);
   };
 

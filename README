@@ -5,7 +5,7 @@
 q import.q
 ```
 hist folder contais hdb
-rdb.dat contains last date (it could be extracted by .z.t (today) date)
+rdb.dat contains last date (it could be extracted by .z.d (today) date)
 
 4) Start stack
 ```
